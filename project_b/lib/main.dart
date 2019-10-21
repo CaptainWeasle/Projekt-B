@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:project_b/src/blocs/debtList_bloc.dart';
+import 'package:project_b/src/pages/detailedPage.dart';
 import 'package:project_b/src/pages/homePage.dart';
 
 void main() => runApp(MyApp());
@@ -10,7 +12,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-
+        BlocProvider<DebtListBloc>(
+          builder: (BuildContext context) => DebtListBloc(),
+        ),
       ],
       child: MaterialApp(
         theme: ThemeData(
@@ -32,7 +36,7 @@ class MyApp extends StatelessWidget {
         initialRoute: "HomePage",
         routes: {
           "HomePage": (context) => HomePage(),
-          //"DetailedPage": (context) => DetailedPage(),
+          "DetailedPage": (context) => DetailedPage(),
           //"ProfilePage": (context) => ProfilePage(),
         },
         debugShowCheckedModeBanner: false,
