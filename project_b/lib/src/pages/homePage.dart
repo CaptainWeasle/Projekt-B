@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:project_b/src/blocs/debtList_bloc.dart';
 import 'package:project_b/src/models/debtList.dart';
+import 'package:project_b/src/pages/addDebtPage.dart';
 import 'package:project_b/src/ui_elements/debtItemWidget.dart';
 
 class HomePage extends StatefulWidget {
@@ -32,7 +33,16 @@ class HomePageState extends State<HomePage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Dept Collector"),
+        title: Text("Debt Collector 3000"),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: (){
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => AddDebtPage()),
+          );
+        },
+        child: Icon(Icons.add),
       ),
       body: _appBody,
     );
