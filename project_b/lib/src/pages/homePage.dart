@@ -13,6 +13,51 @@ class HomePage extends StatefulWidget {
 }
 
 class HomePageState extends State<HomePage> {
+
+
+
+  createAlertDialog(BuildContext context){
+
+    TextEditingController debtInputController = TextEditingController();
+
+    return showDialog(context: context,builder: (context) {
+      return AlertDialog(
+
+          title: Text("Die Insect!"),
+
+          content:
+           Column(children: <Widget>[
+
+             TextField(
+               decoration: InputDecoration(
+                 icon: Icon(Icons.account_circle),
+                 labelText: "Wer?/ Wem?"
+               ),
+             ),
+             TextField(
+               obscureText: true,
+               decoration: InputDecoration(
+                 icon:Icon(Icons.account_balance),
+                 labelText: "Wie viel?"
+               ),
+             ),
+         ],),
+          actions: <Widget>[
+
+            MaterialButton(
+                elevation: 1.0,
+                child: Text("Submit", style: TextStyle(
+                  color: Colors.black,fontSize: 15 ),),
+                color: Colors.yellow,
+                onPressed: () {
+                  Navigator.pop(context);
+                }
+            ),
+          ]
+      );
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     DebtListBloc _debtListBloc = BlocProvider.of<DebtListBloc>(context);
@@ -37,9 +82,7 @@ class HomePageState extends State<HomePage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: (){
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => AddDebtPage()),
+          createAlertDialog(context
           );
         },
         child: Icon(Icons.add),
