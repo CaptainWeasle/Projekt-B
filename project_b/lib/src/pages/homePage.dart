@@ -12,10 +12,14 @@ class HomePage extends StatefulWidget {
   }
 }
 
+
+
 class HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     DebtListBloc _debtListBloc = BlocProvider.of<DebtListBloc>(context);
+
+    bool debtSwitch = true;
 
     Widget summaryDialog = Padding(
       padding: const EdgeInsets.all(16.0),
@@ -33,7 +37,20 @@ class HomePageState extends State<HomePage> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
+            Text("hallo"),
+
+            Switch(
+              value: debtSwitch,
+              onChanged: (value) {
+                setState(() {
+                  debtSwitch = value;
+                });
+              },
+              activeTrackColor: Theme.of(context).accentColor,
+              activeColor: Theme.of(context).primaryColor,
+            ),
             TextField(
+
               decoration: InputDecoration(
                   icon: Icon(Icons.account_circle), labelText: "Wer?/ Wem?"),
             ),
@@ -55,6 +72,7 @@ class HomePageState extends State<HomePage> {
                     Navigator.pop(context);
                   }),
             ),
+
           ],
         ),
       ),
@@ -92,7 +110,9 @@ class HomePageState extends State<HomePage> {
         showGeneralDialog(
           barrierColor: Colors.black.withOpacity(0.2),
           transitionBuilder: (context, a1, a2, widget) {
-            return CustomAlert(content: addDebtDialog,);
+            return CustomAlert(
+              content: addDebtDialog,
+            );
           },
           pageBuilder: (context, animation1, animation2) {},
           transitionDuration: Duration(milliseconds: 0),
