@@ -12,14 +12,12 @@ class HomePage extends StatefulWidget {
   }
 }
 
-
-
 class HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     DebtListBloc _debtListBloc = BlocProvider.of<DebtListBloc>(context);
 
-    bool debtSwitch = true;
+    bool debtSwitch = false;
 
     Widget summaryDialog = Padding(
       padding: const EdgeInsets.all(16.0),
@@ -37,27 +35,40 @@ class HomePageState extends State<HomePage> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            Text("hallo"),
-
-            Switch(
-              value: debtSwitch,
-              onChanged: (value) {
-                setState(() {
-                  debtSwitch = value;
-                });
-              },
-              activeTrackColor: Theme.of(context).accentColor,
-              activeColor: Theme.of(context).primaryColor,
+            Text(
+              "Wer schuldet wem? ",
+              style: TextStyle(color: Colors.black, fontSize: 20),
+            ),
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Text("ICH SCHULDE"),
+                Switch(
+                  value: debtSwitch,
+                  onChanged: (value) {
+                    setState(() {
+                      debtSwitch = value;
+                    });
+                  },
+                  activeTrackColor: Theme.of(context).accentColor,
+                  activeColor: Theme.of(context).primaryColor,
+                ),
+                Text("MIR SCHULDET")
+              ],
             ),
             TextField(
-
               decoration: InputDecoration(
                   icon: Icon(Icons.account_circle), labelText: "Wer?/ Wem?"),
             ),
             TextField(
               keyboardType: TextInputType.number,
               decoration: InputDecoration(
-                  icon: Icon(Icons.account_balance), labelText: "Wie viel?"),
+                  icon: Icon(Icons.monetization_on), labelText: "Wie viel?"),
+            ),
+            TextField(
+              keyboardType: TextInputType.datetime,
+              decoration: InputDecoration(
+                  icon: Icon(Icons.access_time), labelText: "Bis Wann?"),
             ),
             Padding(
               padding: const EdgeInsets.fromLTRB(0, 16, 0, 0),
@@ -72,7 +83,6 @@ class HomePageState extends State<HomePage> {
                     Navigator.pop(context);
                   }),
             ),
-
           ],
         ),
       ),
