@@ -21,12 +21,28 @@ class HomePageState extends State<HomePage> {
 
     Widget summaryDialog = Padding(
       padding: const EdgeInsets.all(16.0),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          //TODO: Content here
-        ],
-      ),
+      child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
+        Text("Summary", style: TextStyle(color: Colors.black, fontSize: 25)),
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Text("ICH SCHULDE INSGESAMT:"),
+            Text("insert VAR here")
+            //TODO hier funktionalität und so blah blah
+          ],
+        ),
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Text("ICH BEKOMME INSGESAMT:"),
+            Text("inservt VAR here") //TODO hier funktionalität blah blah
+          ],
+        ),
+        Row(mainAxisSize: MainAxisSize.min, children: <Widget>[
+          Text("ALLGEMEINE BILANZ:"),
+          Text("inservt VAR here") //TODO hier funktionalität blah blah
+        ]),
+      ]),
     );
 
     Widget addDebtDialog = Padding(
