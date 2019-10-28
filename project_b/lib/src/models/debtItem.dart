@@ -4,6 +4,7 @@ class DebtItem {
   DateTime debtStartDate;
   DateTime debtDeadlineDate;
   int priority;
+  bool iOwe;
 
   DebtItem._();
   DebtItem({
@@ -12,6 +13,7 @@ class DebtItem {
     this.debtStartDate,
     this.debtDeadlineDate,
     this.priority,
+    this.iOwe,
   });
 
   String getName() => name;
@@ -23,11 +25,12 @@ class DebtItem {
   }
 
   String toString(){
-    return "NAME: $name, DEBT: $debt, DEBT START: $debtStartDate, DEBT DEADLINE: $debtDeadlineDate, PRIORITY: $priority";
+    return "NAME: $name, DEBT: $debt, DO I OWE? $iOwe, DEBT START: $debtStartDate, DEBT DEADLINE: $debtDeadlineDate, PRIORITY: $priority";
   }
 
   factory DebtItem.initial(){
     return DebtItem._()
-    ..debt = 0;
+    ..debt = 0
+    ..debtStartDate = DateTime.now();
   }
 }

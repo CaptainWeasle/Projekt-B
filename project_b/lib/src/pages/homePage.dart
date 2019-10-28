@@ -1,9 +1,12 @@
+import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:project_b/src/blocs/debtList_bloc.dart';
+import 'package:project_b/src/blocs/debt_bloc.dart';
 import 'package:project_b/src/models/debtList.dart';
 import 'package:project_b/src/ui_elements/customAlert.dart';
 import 'package:project_b/src/ui_elements/debtItemWidget.dart';
+import 'package:intl/intl.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -17,7 +20,35 @@ class HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     DebtListBloc _debtListBloc = BlocProvider.of<DebtListBloc>(context);
 
+    TextEditingController debtNameController = TextEditingController();
+    TextEditingController debtAmountController = TextEditingController();
+    TextEditingController debtDateController = TextEditingController();
+
     bool debtSwitch = false;
+
+    double calcAllMyDebts() {
+      double debt = 0;
+      for (int i = 0; i < _debtListBloc.currentState.debtList.length; i++) {
+        if (_debtListBloc.currentState.debtList[i].currentState.iOwe) {
+          debt += _debtListBloc.currentState.debtList[i].currentState.getDebt();
+        }
+      }
+      return debt;
+    }
+
+    double calcOtherDebts(){
+      double debt = 0;
+      for (int i = 0; i < _debtListBloc.currentState.debtList.length; i++) {
+        if (!_debtListBloc.currentState.debtList[i].currentState.iOwe) {
+          debt += _debtListBloc.currentState.debtList[i].currentState.getDebt();
+        }
+      }
+      return debt;
+    }
+
+    double calcDebtDifference(){
+      return calcOtherDebts() - calcAllMyDebts();
+    }
 
     Widget summaryDialog = Padding(
       padding: const EdgeInsets.all(16.0),
@@ -27,20 +58,19 @@ class HomePageState extends State<HomePage> {
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             Text("ICH SCHULDE INSGESAMT:"),
-            Text("insert VAR here")
-            //TODO hier funktionalität und so blah blah
+            Text(" " + calcAllMyDebts().toString() + "€"),
           ],
         ),
         Row(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             Text("ICH BEKOMME INSGESAMT:"),
-            Text("inservt VAR here") //TODO hier funktionalität blah blah
+            Text(" " + calcOtherDebts().toString() + "€"),
           ],
         ),
         Row(mainAxisSize: MainAxisSize.min, children: <Widget>[
           Text("ALLGEMEINE BILANZ:"),
-          Text("inservt VAR here") //TODO hier funktionalität blah blah
+          Text(" " + calcDebtDifference().toString() + "€") 
         ]),
       ]),
     );
@@ -73,31 +103,53 @@ class HomePageState extends State<HomePage> {
               ],
             ),
             TextField(
+              controller: debtNameController,
               decoration: InputDecoration(
                   icon: Icon(Icons.account_circle), labelText: "Wer?/ Wem?"),
             ),
             TextField(
+              controller: debtAmountController,
               keyboardType: TextInputType.number,
               decoration: InputDecoration(
                   icon: Icon(Icons.monetization_on), labelText: "Wie viel?"),
             ),
-            TextField(
-              keyboardType: TextInputType.datetime,
+            DateTimeField(
+              controller: debtDateController,
+              format: DateFormat("yyyy-MM-dd"),
               decoration: InputDecoration(
-                  icon: Icon(Icons.access_time), labelText: "Bis Wann?"),
+                  icon: Icon(Icons.date_range), labelText: "Bis Wann?"),
+              onShowPicker: (context, currentValue) {
+                return showDatePicker(
+                    context: context,
+                    firstDate: DateTime(1900),
+                    initialDate: currentValue ?? DateTime.now(),
+                    lastDate: DateTime(2100));
+              },
             ),
             Padding(
               padding: const EdgeInsets.fromLTRB(0, 16, 0, 0),
               child: MaterialButton(
-                  elevation: 5.0,
-                  child: Text(
-                    "Submit",
-                    style: TextStyle(color: Colors.black, fontSize: 15),
-                  ),
-                  color: Theme.of(context).accentColor,
-                  onPressed: () {
+                elevation: 5.0,
+                child: Text(
+                  "Submit",
+                  style: TextStyle(color: Colors.black, fontSize: 15),
+                ),
+                color: Theme.of(context).accentColor,
+                onPressed: () {
+                  setState(() {
+                    DebtBloc newDebt = DebtBloc();
+                    newDebt.currentState.name = debtNameController.text;
+                    newDebt.currentState.debt =
+                        double.parse(debtAmountController.text);
+                    String date = debtDateController.text + " 00:00:00Z";
+                    newDebt.currentState.debtDeadlineDate =
+                        DateTime.parse(date);
+                    newDebt.currentState.iOwe = !debtSwitch;
+                    _debtListBloc.onAddDebt(newDebt);
                     Navigator.pop(context);
-                  }),
+                  });
+                },
+              ),
             ),
           ],
         ),
@@ -114,7 +166,7 @@ class HomePageState extends State<HomePage> {
                   Curves.linearToEaseOut.transform(a1.value) - 1.0;
               return Transform(
                 transform:
-                    Matrix4.translationValues(0.0, curvedValue * 200, 0.0),
+                    Matrix4.translationValues(0.0, curvedValue * 600, 0.0),
                 child: Opacity(
                     opacity: a1.value,
                     child: CustomAlert(
@@ -122,7 +174,7 @@ class HomePageState extends State<HomePage> {
                     )),
               );
             },
-            transitionDuration: Duration(milliseconds: 150),
+            transitionDuration: Duration(milliseconds: 350),
             barrierDismissible: true,
             barrierLabel: '',
             context: context,

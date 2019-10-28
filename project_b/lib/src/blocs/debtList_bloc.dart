@@ -6,15 +6,15 @@ import 'debt_bloc.dart';
 
 class DebtListBloc extends Bloc<DebtListEvents, DebtList> {
 
-  onRemoveCard(DebtBloc item) {
+  onRemoveDebt(DebtBloc item) {
     dispatch(RemoveDebt(item));
   }
 
-  onAddCard(DebtBloc item) {
+  onAddDebt(DebtBloc item) {
     dispatch(AddDebt(item));
   }
 
-  onRemoveAllCards(){
+  onRemoveAllDebts(){
     dispatch(RemoveAllDebts());
   }
 
