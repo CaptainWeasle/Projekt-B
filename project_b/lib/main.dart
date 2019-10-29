@@ -35,7 +35,7 @@ class MyApp extends StatelessWidget {
         initialRoute: "HomePage",
         routes: {
           "HomePage": (context) => HomePage(),
-          "DetailedPage": (context) => DetailedPage(),
+          //"DetailedPage": (context) => DetailedPage(),
           //"AddDebtPage": (context) => AddDebtPage(),
         },
         debugShowCheckedModeBanner: false,

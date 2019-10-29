@@ -1,5 +1,7 @@
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:project_b/src/blocs/debt_bloc.dart';
+import 'package:project_b/src/pages/detailedPage.dart';
 
 class DebtItemWidget extends StatefulWidget {
   final DebtBloc debtBloc;
@@ -17,7 +19,10 @@ class DebtItemWidgetState extends State<DebtItemWidget> {
     // TODO: implement build
     return GestureDetector(
       onTap: () {
-        Navigator.pushNamed(context, "DetailedPage");
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => DetailedPage(widget.debtBloc)),
+        );
       },
       child: Text(widget.debtBloc.currentState.toString()),
     );
