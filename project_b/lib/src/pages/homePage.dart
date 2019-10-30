@@ -26,6 +26,8 @@ class HomePageState extends State<HomePage> {
 
     bool debtSwitch = false;
 
+    var bilanzColor;
+
     double calcAllMyDebts() {
       double debt = 0;
       for (int i = 0; i < _debtListBloc.currentState.debtList.length; i++) {
@@ -36,7 +38,7 @@ class HomePageState extends State<HomePage> {
       return debt;
     }
 
-    double calcOtherDebts(){
+    double calcOtherDebts() {
       double debt = 0;
       for (int i = 0; i < _debtListBloc.currentState.debtList.length; i++) {
         if (!_debtListBloc.currentState.debtList[i].currentState.iOwe) {
@@ -46,33 +48,105 @@ class HomePageState extends State<HomePage> {
       return debt;
     }
 
-    double calcDebtDifference(){
-      return calcOtherDebts() - calcAllMyDebts();
+    double calcDebtDifference() {
+      var calcDiff = calcOtherDebts() - calcAllMyDebts();
+      if (calcDiff > 0) {
+        bilanzColor = Colors.green;
+      } else if (calcDiff < 0) {
+        bilanzColor = Colors.red;
+      } else {
+        bilanzColor = Colors.black;
+      }
+      return calcDiff;
     }
 
-    Widget summaryDialog = Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
-        Text("Summary", style: TextStyle(color: Colors.black, fontSize: 25)),
-        Row(
+    Widget summaryDialog = Column(
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        Container(
+          padding: const EdgeInsets.all(16.0),
+          decoration: BoxDecoration(
+            color: Theme.of(context).primaryColor,
+            borderRadius: BorderRadius.circular(20),
+          ),
+          height: 75,
+          width: 370,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Text("Summary", style: Theme.of(context).textTheme.title),
+            ],
+          ),
+        ),
+        Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            Text("ICH SCHULDE INSGESAMT:"),
-            Text(" " + calcAllMyDebts().toString() + "€"),
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Text(
+                  "ICH SCHULDE GESAMT:",
+                  style: TextStyle(
+                      height: 2.5, fontSize: 20, fontFamily: 'Montserrat'),
+                ),
+                Text(
+                  " -" + calcAllMyDebts().toString() + "€",
+                  style: TextStyle(
+                    height: 2.5,
+                    fontSize: 20,
+                    fontFamily: 'Montserrat',
+                    color: Colors.red,
+                  ),
+                ),
+              ],
+            ),
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Text(
+                  "ICH BEKOMME GESAMT:",
+                  style: TextStyle(
+                    height: 2.5,
+                    fontSize: 20,
+                    fontFamily: 'Montserrat',
+                  ),
+                ),
+                Text(
+                  " " + calcOtherDebts().toString() + "€",
+                  style: TextStyle(
+                    height: 2.5,
+                    fontSize: 20,
+                    fontFamily: 'Montserrat',
+                    color: Colors.green,
+                  ),
+                ),
+              ],
+            ),
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Text(
+                  "Meine Bilanz:",
+                  style: TextStyle(
+                    height: 2.5,
+                    fontSize: 20,
+                    fontFamily: 'Montserrat',
+                  ),
+                ),
+                Text(
+                  " " + calcDebtDifference().toString() + "€",
+                  style: TextStyle(
+                    height: 2.5,
+                    fontSize: 20,
+                    fontFamily: 'Montserrat',
+                    color: bilanzColor,
+                  ),
+                ),
+              ],
+            ),
           ],
         ),
-        Row(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            Text("ICH BEKOMME INSGESAMT:"),
-            Text(" " + calcOtherDebts().toString() + "€"),
-          ],
-        ),
-        Row(mainAxisSize: MainAxisSize.min, children: <Widget>[
-          Text("ALLGEMEINE BILANZ:"),
-          Text(" " + calcDebtDifference().toString() + "€") 
-        ]),
-      ]),
+      ],
     );
 
     Widget addDebtDialog = Padding(

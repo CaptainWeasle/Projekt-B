@@ -13,7 +13,7 @@ class CustomAlertState extends State<CustomAlert> {
   Widget build(BuildContext context) {
     return Dialog(
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(20),
       ),
       child: widget.content,
     );
