@@ -74,7 +74,7 @@ class HomePageState extends State<HomePage> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              Text("Summary", style: Theme.of(context).textTheme.title),
+              Text("Summary", style: Theme.of(context).textTheme.title,),
             ],
           ),
         ),
@@ -203,10 +203,11 @@ class HomePageState extends State<HomePage> {
             Padding(
               padding: const EdgeInsets.fromLTRB(0, 16, 0, 0),
               child: MaterialButton(
-                elevation: 5.0,
+                elevation: 10,
+                colorBrightness: Brightness.dark,
                 child: Text(
                   "Submit",
-                  style: TextStyle(color: Colors.black, fontSize: 15),
+                  style: TextStyle(color: Colors.white, fontSize: 17),
                 ),
                 color: Theme.of(context).accentColor,
                 onPressed: () {
@@ -274,6 +275,7 @@ class HomePageState extends State<HomePage> {
         );
       },
       child: Icon(Icons.add),
+      backgroundColor: Colors.black
     );
 
     var _appBody = BlocBuilder(

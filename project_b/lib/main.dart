@@ -18,8 +18,8 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         theme: ThemeData(
           brightness: Brightness.light,
-          primaryColor: Colors.yellow,
-          accentColor: Colors.yellowAccent,
+          primaryColor: Colors.black,
+          accentColor: Colors.black54,
 
           // Define the default font family.
           fontFamily: 'Montserrat',
@@ -31,7 +31,7 @@ class MyApp extends StatelessWidget {
             title: TextStyle(
               fontSize: 36.0,
               fontStyle: FontStyle.italic,
-              color: Colors.black,
+              color: Colors.white,
             ),
             body1: TextStyle(fontSize: 14.0, fontFamily: 'Hind'),
           ),

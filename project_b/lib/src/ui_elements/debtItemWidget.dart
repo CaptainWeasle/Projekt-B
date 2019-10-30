@@ -17,6 +17,7 @@ class DebtItemWidgetState extends State<DebtItemWidget> {
     var _appBody = Padding(
       padding: EdgeInsets.all(4),
       child: Card(
+        color: Colors.black45,
         elevation: 25,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
