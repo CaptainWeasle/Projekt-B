@@ -14,10 +14,53 @@ class DebtItemWidget extends StatefulWidget {
 class DebtItemWidgetState extends State<DebtItemWidget> {
   @override
   Widget build(BuildContext context) {
+    priorityFarbe() {
+      if (widget.debtBloc.currentState.priority == 1) {
+        return Text(
+          " High",
+          style: TextStyle(
+            fontSize: 20,
+            color: Colors.red,
+          ),
+        );
+      } else if (widget.debtBloc.currentState.priority == 2) {
+        return Text(
+          "Normal",
+          style: TextStyle(
+            fontSize: 20,
+            color: Colors.orange,
+          ),
+        );
+      } else if (widget.debtBloc.currentState.priority == 3) {
+        return Text(
+          " Low",
+          style: TextStyle(
+            fontSize: 20,
+            color: Colors.green,
+          ),
+        );
+      }
+      return Text(
+        "Keine",
+        style: TextStyle(
+          fontSize: 20,
+          color: Colors.black,
+        ),
+      );
+    }
+
+    debtBoxFarbe() {
+      if (widget.debtBloc.currentState.iOwe) {
+        return Colors.red;
+      } else if (!widget.debtBloc.currentState.iOwe) {
+        return Colors.green;
+      }
+      return Colors.grey;
+    }
+
     var _appBody = Padding(
       padding: EdgeInsets.all(4),
       child: Card(
-        color: Colors.black45,
         elevation: 25,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
@@ -28,14 +71,14 @@ class DebtItemWidgetState extends State<DebtItemWidget> {
             Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
-                color: Colors.red,
+                color: debtBoxFarbe(),
               ),
               alignment: Alignment.centerLeft,
               child: Padding(
                 padding: EdgeInsets.all(8),
                 child: Icon(
-                  Icons.attach_money,
-                  size: 50,
+                  Icons.account_box,
+                  size: 60,
                 ),
               ),
             ),
@@ -56,7 +99,16 @@ class DebtItemWidgetState extends State<DebtItemWidget> {
                     ],
                   ),
                 ),
-                Text(widget.debtBloc.currentState.getDebtDeadline().toString().substring(0, 10),
+                Text(
+                  "  Bis: " +
+                      widget.debtBloc.currentState
+                          .getDebtDeadline()
+                          .toString()
+                          .substring(0, 10) +
+                      "    ",
+                  style: TextStyle(
+                    fontSize: 20,
+                  ),
                 ),
               ],
             ),
@@ -69,17 +121,27 @@ class DebtItemWidgetState extends State<DebtItemWidget> {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: <Widget>[
                       Text(
-                        widget.debtBloc.currentState.debt.toString(),
+                        widget.debtBloc.currentState.debt.toString() + " €",
                         textAlign: TextAlign.right,
                         style: TextStyle(
                           fontSize: 30,
+                          color: debtBoxFarbe(),
                         ),
                       ),
                     ],
                   ),
                 ),
-                Text(
-                  widget.debtBloc.currentState.getPriority().toString(),
+                Row(
+                  children: <Widget>[
+                    Text(
+                      "Priority: ",
+                      style: TextStyle(
+                        fontSize: 20,
+                        color: Colors.black,
+                      ),
+                    ),
+                    priorityFarbe(),
+                  ],
                 ),
               ],
             ),
