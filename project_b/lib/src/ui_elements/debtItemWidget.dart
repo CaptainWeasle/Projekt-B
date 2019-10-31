@@ -58,6 +58,26 @@ class DebtItemWidgetState extends State<DebtItemWidget> {
       return Colors.grey;
     }
 
+    Widget debtNumber() {
+      if (widget.debtBloc.currentState.iOwe) {
+        return Text(
+          "-" + widget.debtBloc.currentState.debt.toString() + "€",
+          style: TextStyle(
+            color: Colors.red,
+            fontSize: 30,
+          ),
+        );
+      } else if (!widget.debtBloc.currentState.iOwe) {
+        return Text(
+           "+" + widget.debtBloc.currentState.debt.toString() + "€",
+          style: TextStyle(
+            color: Colors.green,
+            fontSize: 30,
+          ),
+        );
+      }
+    }
+
     var _appBody = Padding(
       padding: EdgeInsets.all(4),
       child: Card(
@@ -120,14 +140,7 @@ class DebtItemWidgetState extends State<DebtItemWidget> {
                     mainAxisSize: MainAxisSize.max,
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: <Widget>[
-                      Text(
-                        widget.debtBloc.currentState.debt.toString() + " €",
-                        textAlign: TextAlign.right,
-                        style: TextStyle(
-                          fontSize: 30,
-                          color: debtBoxFarbe(),
-                        ),
-                      ),
+                     debtNumber(),
                     ],
                   ),
                 ),

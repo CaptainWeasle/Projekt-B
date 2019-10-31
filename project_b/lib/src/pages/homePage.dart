@@ -23,6 +23,7 @@ class HomePageState extends State<HomePage> {
     TextEditingController debtNameController = TextEditingController();
     TextEditingController debtAmountController = TextEditingController();
     TextEditingController debtDateController = TextEditingController();
+
     var prio = 0;
 
     IconData _iconPrio = Icons.add_circle_outline;
@@ -367,6 +368,13 @@ class HomePageState extends State<HomePage> {
       },
     );
 
+    var _searchIcon = IconButton(
+      icon: Icon(Icons.search),
+      onPressed: () {
+        showSearch(context: context, delegate: DataSearch());
+      },
+    );
+
     var _floatingActionButton = FloatingActionButton(
         onPressed: () {
           //TODO: Opacity transition, also rein faden und raus faden
@@ -405,11 +413,101 @@ class HomePageState extends State<HomePage> {
       appBar: AppBar(
         title: Text("Debt Collector 3000"),
         actions: <Widget>[
+          _searchIcon,
           _summaryIcon,
         ],
       ),
       floatingActionButton: _floatingActionButton,
       body: _appBody,
+    );
+  }
+}
+
+class DataSearch extends SearchDelegate<String> {
+  final testList = [
+    "test",
+    "ignorier",
+    "diesen",
+    "teil",
+    "des",
+    "codes",
+    "diese",
+    "liste",
+    "ist",
+    "nur",
+    "hier",
+    "weil",
+    "ich",
+    "nicht",
+    "weiß",
+    "wie",
+    "man",
+    "cards",
+    "sucht",
+  ];
+
+  final recentTest = [];
+
+  @override
+  List<Widget> buildActions(BuildContext context) {
+    return [
+      IconButton(
+          icon: Icon(Icons.clear),
+          onPressed: () {
+            query = "";
+          })
+    ];
+  }
+
+  @override
+  Widget buildLeading(BuildContext context) {
+    return IconButton(
+      icon: AnimatedIcon(
+        icon: AnimatedIcons.menu_arrow,
+        progress: transitionAnimation,
+      ),
+      onPressed: () {
+        close(context, null);
+      },
+    );
+  }
+
+  @override
+  Widget buildResults(BuildContext context) {
+   return  Scaffold(
+     appBar: AppBar(
+       title: Text(
+         "Infos",
+       ),
+     ),
+   );
+  }
+
+  @override
+  Widget buildSuggestions(BuildContext context) {
+    final suggestionList = query.isEmpty
+        ? recentTest
+        : testList.where((p) => p.startsWith(query)).toList();
+    return ListView.builder(
+      itemBuilder: (context, index) => ListTile(
+        onTap: (){
+          showResults(context);
+        },
+        leading: Icon(Icons.account_box),
+        title: RichText(
+          text: TextSpan(
+            text: suggestionList[index].substring(0, query.length),
+            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+            children: [
+              TextSpan(
+                text: suggestionList[index].substring(query.length),
+                style: TextStyle(color: Colors.grey),
+              ),
+            ],
+          ),
+        ),
+      ),
+      itemCount: suggestionList.length,
     );
   }
 }

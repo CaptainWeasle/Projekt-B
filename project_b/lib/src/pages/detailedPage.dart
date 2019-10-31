@@ -62,20 +62,52 @@ class DetailedPageState extends State<DetailedPage> {
     Widget debtNumber() {
       if (widget.debtBloc.currentState.iOwe) {
         return Text(
-          "-" + widget.debtBloc.currentState.debt.toString() + "€",
-          style: TextStyle(color: Colors.red),
+          "   -" + widget.debtBloc.currentState.debt.toString() + "€",
+          style: TextStyle(
+            color: Colors.red,
+            fontSize: 30,
+          ),
         );
       } else if (!widget.debtBloc.currentState.iOwe) {
         return Text(
-          "+" + widget.debtBloc.currentState.debt.toString() + "€",
-          style: TextStyle(color: Colors.green),
+          "   +" + widget.debtBloc.currentState.debt.toString() + "€",
+          style: TextStyle(
+            color: Colors.green,
+            fontSize: 30,
+          ),
         );
       }
+    }
+
+    werSchuldetWem(){
+      if(widget.debtBloc.currentState.iOwe == true){
+        return Text("Ich schulde...",
+          style:Theme.of(context).textTheme.title
+        );
+      }else if(widget.debtBloc.currentState.iOwe == false){
+        return Text("Mir schuldet...",
+          style: Theme.of(context).textTheme.title
+        );
+      }
+      return Text("Nur arme leihen sich Geld...",
+        style: Theme.of(context).textTheme.title
+      );
     }
 
     var _appBody = Column(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: <Widget>[
+        Container(
+          height: 50,
+          width: 350,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(16),
+            color: Colors.black,
+          ),
+          child: Center(
+            child: werSchuldetWem(),
+          ),
+        ),
         Row(
           children: <Widget>[
             Container(
@@ -128,12 +160,7 @@ class DetailedPageState extends State<DetailedPage> {
                 ),
               ),
             ),
-            Text(
-              "   " + widget.debtBloc.currentState.getDebt().toString() + " €",
-              style: TextStyle(
-                fontSize: 30,
-              ),
-            ),
+           debtNumber(),
           ],
         ),
         Row(
