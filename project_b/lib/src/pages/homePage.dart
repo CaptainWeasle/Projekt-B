@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:project_b/src/blocs/debtList_bloc.dart';
 import 'package:project_b/src/blocs/debt_bloc.dart';
 import 'package:project_b/src/models/debtList.dart';
+import 'package:project_b/src/pages/addDebtPage.dart';
 import 'package:project_b/src/ui_elements/customAlert.dart';
 import 'package:project_b/src/ui_elements/debtItemWidget.dart';
 import 'package:intl/intl.dart';
@@ -80,7 +81,12 @@ class HomePageState extends State<HomePage> {
             children: <Widget>[
               Text(
                 "Summary",
-                style: Theme.of(context).textTheme.title,
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 36.0,
+                  fontStyle: FontStyle.italic,
+                  color: Colors.white,
+                ),
               ),
             ],
           ),
@@ -170,7 +176,12 @@ class HomePageState extends State<HomePage> {
           child: Center(
             child: Text(
               "Schuld hinzufügen",
-              style: Theme.of(context).textTheme.title,
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 36.0,
+                fontStyle: FontStyle.italic,
+                color: Colors.white,
+              ),
             ),
           ),
         ),
@@ -381,8 +392,8 @@ class HomePageState extends State<HomePage> {
           showGeneralDialog(
             barrierColor: Colors.black.withOpacity(0.2),
             transitionBuilder: (context, a1, a2, widget) {
-              return CustomAlert(
-                content: addDebtDialog,
+              return AddDebtPage(
+                debtListBloc: _debtListBloc,
               );
             },
             pageBuilder: (context, animation1, animation2) {},
@@ -495,14 +506,14 @@ class DataSearch extends SearchDelegate<String> {
         },
         leading: Icon(Icons.account_box),
         title: RichText(
-          text: TextSpan(
-            text: suggestionList[index].substring(0, query.length),
-            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-            children: [
-              TextSpan(
-                text: suggestionList[index].substring(query.length),
-                style: TextStyle(color: Colors.grey),
-              ),
+        text: TextSpan(
+          text: suggestionList[index].substring(0, query.length),
+          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+          children: [
+            TextSpan(
+              text: suggestionList[index].substring(query.length),
+              style: TextStyle(color: Colors.grey),
+            ),
             ],
           ),
         ),
