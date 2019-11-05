@@ -82,15 +82,27 @@ class DetailedPageState extends State<DetailedPage> {
     werSchuldetWem(){
       if(widget.debtBloc.currentState.iOwe == true){
         return Text("Ich schulde...",
-          style:Theme.of(context).textTheme.title
+          style: TextStyle(
+            fontSize: 36.0,
+            fontStyle: FontStyle.italic,
+            color: Colors.white,
+          ),
         );
       }else if(widget.debtBloc.currentState.iOwe == false){
         return Text("Mir schuldet...",
-          style: Theme.of(context).textTheme.title
+          style: TextStyle(
+            fontSize: 36.0,
+            fontStyle: FontStyle.italic,
+            color: Colors.white,
+          ),
         );
       }
       return Text("Nur arme leihen sich Geld...",
-        style: Theme.of(context).textTheme.title
+        style: TextStyle(
+          fontSize: 36.0,
+          fontStyle: FontStyle.italic,
+          color: Colors.white,
+        ),
       );
     }
 

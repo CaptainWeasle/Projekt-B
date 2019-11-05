@@ -16,7 +16,7 @@ class AddDebtPage extends StatefulWidget {
 
 
 class AddDebtPageState extends State<AddDebtPage> {
-  @override
+
   var prio = 0;
 
   IconData _iconPrio1 = Icons.add_circle_outline;

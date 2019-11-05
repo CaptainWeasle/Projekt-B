@@ -6,6 +6,7 @@ import 'package:project_b/src/blocs/debt_bloc.dart';
 import 'package:project_b/src/models/debtList.dart';
 import 'package:project_b/src/pages/addDebtPage.dart';
 import 'package:project_b/src/ui_elements/customAlert.dart';
+import 'package:project_b/src/ui_elements/dataSearch.dart';
 import 'package:project_b/src/ui_elements/debtItemWidget.dart';
 import 'package:intl/intl.dart';
 
@@ -17,19 +18,38 @@ class HomePage extends StatefulWidget {
 }
 
 class HomePageState extends State<HomePage> {
+  var prio = 0;
+
+  IconData _iconPrio1 = Icons.add_circle_outline;
+  IconData _iconPrio2 = Icons.add_circle_outline;
+  IconData _iconPrio3 = Icons.add_circle_outline;
+
+  getRightIcon(){
+    if(prio == 1){
+      _iconPrio1 = Icons.add_circle;
+      _iconPrio2 = Icons.add_circle_outline;
+      _iconPrio3 = Icons.add_circle_outline;
+    }else if(prio == 2){
+      _iconPrio2 = Icons.add_circle;
+      _iconPrio1 = Icons.add_circle_outline;
+      _iconPrio3 = Icons.add_circle_outline;
+    }else if(prio == 3){
+      _iconPrio3 = Icons.add_circle;
+      _iconPrio2 = Icons.add_circle_outline;
+      _iconPrio1 = Icons.add_circle_outline;
+    }
+  }
+
+  bool debtSwitch = false;
+
+  TextEditingController debtNameController = TextEditingController();
+  TextEditingController debtAmountController = TextEditingController();
+  TextEditingController debtDateController = TextEditingController();
+
+
   @override
   Widget build(BuildContext context) {
     DebtListBloc _debtListBloc = BlocProvider.of<DebtListBloc>(context);
-
-    TextEditingController debtNameController = TextEditingController();
-    TextEditingController debtAmountController = TextEditingController();
-    TextEditingController debtDateController = TextEditingController();
-
-    var prio = 0;
-
-    IconData _iconPrio = Icons.add_circle_outline;
-
-    bool debtSwitch = false;
 
     var bilanzColor;
 
@@ -64,6 +84,202 @@ class HomePageState extends State<HomePage> {
       }
       return calcDiff;
     }
+
+    Widget addDebtDialog = Column(
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        Container(
+          padding: const EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            color: Theme.of(context).primaryColor,
+            borderRadius: BorderRadius.circular(20),
+          ),
+          height: 75,
+          width: 370,
+          child: Center(
+            child: Text(
+              "Schuld hinzufügen",
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 36.0,
+                fontStyle: FontStyle.italic,
+                color: Colors.white,
+              ),
+            ),
+          ),
+        ),
+        Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Padding(
+              padding: EdgeInsets.all(4),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Text(
+                    "Ich schulde",
+                    style: TextStyle(
+                      fontSize: 20,
+                    ),
+                  ),
+                  Switch(
+                    value: debtSwitch,
+                    onChanged: (value) {
+                      setState(
+                            () {
+                          debtSwitch = value;
+                        },
+                      );
+                    },
+                    activeTrackColor: Theme.of(context).accentColor,
+                    activeColor: Theme.of(context).primaryColor,
+                  ),
+                  Text(
+                    "Mir schuldet",
+                    style: TextStyle(
+                      fontSize: 20,
+                    ),
+                  )
+                ],
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.all(4),
+              child: TextField(
+                maxLength: 9,
+                controller: debtNameController,
+                decoration: InputDecoration(
+                  counterText: "",
+                  border: OutlineInputBorder(),
+                  icon: Icon(Icons.account_circle),
+                  labelText: "Wer?/ Wem?",
+                ),
+                onChanged: (s) {
+                  print( debtNameController.text);
+                },
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.all(4),
+              child: TextField(
+                maxLength: 4,
+                controller: debtAmountController,
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(
+                    counterText: "",
+                    border: OutlineInputBorder(),
+                    icon: Icon(Icons.monetization_on),
+                    labelText: "Wie viel?"),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.all(4),
+              child: DateTimeField(
+                controller: debtDateController,
+                format: DateFormat("yyyy-MM-dd"),
+                decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    icon: Icon(Icons.date_range),
+                    labelText: "Bis Wann?"),
+                onShowPicker: (context, currentValue) {
+                  return showDatePicker(
+                      context: context,
+                      firstDate: DateTime(1900),
+                      initialDate: currentValue ?? DateTime.now(),
+                      lastDate: DateTime(2100));
+                },
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.all(4),
+              child: Text(
+                "Priorität?",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 20,
+                ),
+              ),
+            ),
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                IconButton(
+                  icon: Icon(_iconPrio1),
+                  iconSize: 30,
+                  color: Colors.red,
+                  onPressed: () {
+                    setState(
+                          () {
+                        prio = 1;
+                        getRightIcon();
+                      },
+                    );
+                  },
+                ),
+                IconButton(
+                  icon: Icon(_iconPrio2),
+                  iconSize: 30,
+                  color: Colors.orange,
+                  onPressed: () {
+                    setState(
+                          () {
+                        prio = 2;
+                        getRightIcon();
+                      },
+                    );
+                  },
+                ),
+                IconButton(
+                  icon: Icon(_iconPrio3),
+                  iconSize: 30,
+                  color: Colors.green,
+                  onPressed: () {
+                    setState(
+                          () {
+                        prio = 3;
+                        getRightIcon();
+                      },
+                    );
+                  },
+                ),
+              ],
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(0, 4, 4, 4),
+              child: MaterialButton(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15.0)),
+                elevation: 25,
+                colorBrightness: Brightness.dark,
+                child: Text(
+                  "Bestätigen",
+                  style: TextStyle(color: Colors.white, fontSize: 17),
+                ),
+                color: Colors.black,
+                onPressed: () {
+                  setState(
+                        () {
+                      DebtBloc newDebt = DebtBloc();
+                      newDebt.currentState.name = debtNameController.text;
+                      newDebt.currentState.debt =
+                          double.parse(debtAmountController.text);
+                      String date = debtDateController.text + " 00:00:00Z";
+                      newDebt.currentState.debtDeadlineDate =
+                          DateTime.parse(date);
+                      newDebt.currentState.iOwe = !debtSwitch;
+                      newDebt.currentState.priority = prio;
+                      _debtListBloc.onAddDebt(newDebt);
+                      Navigator.pop(context);
+                    },
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+
 
     Widget summaryDialog = Column(
       mainAxisSize: MainAxisSize.min,
@@ -162,246 +378,67 @@ class HomePageState extends State<HomePage> {
       ],
     );
 
-    Widget addDebtDialog = Column(
-      mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-        Container(
-          padding: const EdgeInsets.all(8),
-          decoration: BoxDecoration(
-            color: Theme.of(context).primaryColor,
-            borderRadius: BorderRadius.circular(20),
-          ),
-          height: 75,
-          width: 370,
-          child: Center(
-            child: Text(
-              "Schuld hinzufügen",
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 36.0,
-                fontStyle: FontStyle.italic,
-                color: Colors.white,
-              ),
-            ),
-          ),
-        ),
-        Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            Padding(
-              padding: EdgeInsets.all(4),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  Text(
-                    "Ich schulde",
-                    style: TextStyle(
-                      fontSize: 20,
-                    ),
-                  ),
-                  Switch(
-                    value: debtSwitch,
-                    onChanged: (value) {
-                      setState(
-                        () {
-                          debtSwitch = value;
-                        },
-                      );
-                    },
-                    activeTrackColor: Theme.of(context).accentColor,
-                    activeColor: Theme.of(context).primaryColor,
-                  ),
-                  Text(
-                    "Mir schuldet",
-                    style: TextStyle(
-                      fontSize: 20,
-                    ),
-                  )
-                ],
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.all(4),
-              child: TextField(
-                maxLength: 9,
-                controller: debtNameController,
-                decoration: InputDecoration(
-                    counterText: "",
-                    border: OutlineInputBorder(),
-                    icon: Icon(Icons.account_circle),
-                    labelText: "Wer?/ Wem?"),
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.all(4),
-              child: TextField(
-                maxLength: 4,
-                controller: debtAmountController,
-                keyboardType: TextInputType.number,
-                decoration: InputDecoration(
-                    counterText: "",
-                    border: OutlineInputBorder(),
-                    icon: Icon(Icons.monetization_on),
-                    labelText: "Wie viel?"),
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.all(4),
-              child: DateTimeField(
-                controller: debtDateController,
-                format: DateFormat("yyyy-MM-dd"),
-                decoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                    icon: Icon(Icons.date_range),
-                    labelText: "Bis Wann?"),
-                onShowPicker: (context, currentValue) {
-                  return showDatePicker(
-                      context: context,
-                      firstDate: DateTime(1900),
-                      initialDate: currentValue ?? DateTime.now(),
-                      lastDate: DateTime(2100));
-                },
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.all(4),
-              child: Text(
-                "Priorität?",
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 20,
-                ),
-              ),
-            ),
-            Row(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                IconButton(
-                  icon: Icon(_iconPrio),
-                  iconSize: 30,
-                  color: Colors.red,
-                  onPressed: () {
-                    setState(
-                      () {
-                        prio = 1;
-                        _iconPrio = Icons.add_circle;
-                      },
-                    );
-                  },
-                ),
-                IconButton(
-                  icon: Icon(_iconPrio),
-                  iconSize: 30,
-                  color: Colors.orange,
-                  onPressed: () {
-                    setState(
-                      () {
-                        prio = 2;
-                        _iconPrio = Icons.add_circle;
-                      },
-                    );
-                  },
-                ),
-                IconButton(
-                  icon: Icon(_iconPrio),
-                  iconSize: 30,
-                  color: Colors.green,
-                  onPressed: () {
-                    setState(
-                      () {
-                        prio = 3;
-                        _iconPrio = Icons.add_circle;
-                      },
-                    );
-                  },
-                ),
-              ],
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(0, 4, 4, 4),
-              child: MaterialButton(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15.0)),
-                elevation: 25,
-                colorBrightness: Brightness.dark,
-                child: Text(
-                  "Bestätigen",
-                  style: TextStyle(color: Colors.white, fontSize: 17),
-                ),
-                color: Colors.black,
-                onPressed: () {
-                  setState(
-                    () {
-                      DebtBloc newDebt = DebtBloc();
-                      newDebt.currentState.name = debtNameController.text;
-                      newDebt.currentState.debt =
-                          double.parse(debtAmountController.text);
-                      String date = debtDateController.text + " 00:00:00Z";
-                      newDebt.currentState.debtDeadlineDate =
-                          DateTime.parse(date);
-                      newDebt.currentState.iOwe = !debtSwitch;
-                      newDebt.currentState.priority = prio;
-                      _debtListBloc.onAddDebt(newDebt);
-                      Navigator.pop(context);
-                    },
-                  );
-                },
-              ),
-            ),
-          ],
-        ),
-      ],
-    );
-
     var _summaryIcon = IconButton(
       icon: Icon(Icons.assessment),
       onPressed: () {
-        showGeneralDialog(
-            barrierColor: Colors.black.withOpacity(0.01),
-            transitionBuilder: (context, a1, a2, widget) {
-              final curvedValue =
-                  Curves.linearToEaseOut.transform(a1.value) - 1.0;
-              return Transform(
-                transform:
-                    Matrix4.translationValues(0.0, curvedValue * 600, 0.0),
-                child: Opacity(
-                    opacity: a1.value,
-                    child: CustomAlert(
-                      content: summaryDialog,
-                    )),
-              );
-            },
-            transitionDuration: Duration(milliseconds: 350),
-            barrierDismissible: true,
-            barrierLabel: '',
-            context: context,
-            pageBuilder: (context, animation1, animation2) {});
+        setState(() {
+          showGeneralDialog(
+              barrierColor: Colors.black.withOpacity(0.01),
+              transitionBuilder: (context, a1, a2, widget) {
+                 final curvedValue =
+                     Curves.linearToEaseOut.transform(a1.value) - 1.0;
+                 return Transform(
+                   transform:
+                   Matrix4.translationValues(0.0, curvedValue * 600, 0.0),
+                   child: Opacity(
+                       opacity: a1.value,
+                       child: CustomAlert(
+                         content: summaryDialog,
+                       )),
+                 );
+              },
+              transitionDuration: Duration(milliseconds: 350),
+              barrierDismissible: true,
+              barrierLabel: '',
+              context: context,
+              pageBuilder: (context, animation1, animation2) {});
+        });
       },
     );
 
     var _searchIcon = IconButton(
       icon: Icon(Icons.search),
       onPressed: () {
-        showSearch(context: context, delegate: DataSearch());
+        showSearch(
+            context: context,
+            delegate: DataSearch(
+              bloc: _debtListBloc,
+            ));
       },
     );
 
     var _floatingActionButton = FloatingActionButton(
         onPressed: () {
+          setState(() {
+            showGeneralDialog(
+              barrierColor: Colors.black.withOpacity(0.2),
+              transitionBuilder: (context, a1, a2, widget) {
+                return Dialog(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: addDebtDialog,
+                );
+              },
+              pageBuilder: (context, animation1, animation2) {},
+              transitionDuration: Duration(milliseconds: 0),
+              barrierDismissible: true,
+              barrierLabel: '',
+              context: context,
+            );
+          });
           //TODO: Opacity transition, also rein faden und raus faden
-          showGeneralDialog(
-            barrierColor: Colors.black.withOpacity(0.2),
-            transitionBuilder: (context, a1, a2, widget) {
-              return AddDebtPage(
-                debtListBloc: _debtListBloc,
-              );
-            },
-            pageBuilder: (context, animation1, animation2) {},
-            transitionDuration: Duration(milliseconds: 0),
-            barrierDismissible: true,
-            barrierLabel: '',
-            context: context,
-          );
+
         },
         child: Icon(Icons.add),
         backgroundColor: Colors.black);
@@ -430,95 +467,6 @@ class HomePageState extends State<HomePage> {
       ),
       floatingActionButton: _floatingActionButton,
       body: _appBody,
-    );
-  }
-}
-
-class DataSearch extends SearchDelegate<String> {
-  final testList = [
-    "test",
-    "ignorier",
-    "diesen",
-    "teil",
-    "des",
-    "codes",
-    "diese",
-    "liste",
-    "ist",
-    "nur",
-    "hier",
-    "weil",
-    "ich",
-    "nicht",
-    "weiß",
-    "wie",
-    "man",
-    "cards",
-    "sucht",
-  ];
-
-  final recentTest = [];
-
-  @override
-  List<Widget> buildActions(BuildContext context) {
-    return [
-      IconButton(
-          icon: Icon(Icons.clear),
-          onPressed: () {
-            query = "";
-          })
-    ];
-  }
-
-  @override
-  Widget buildLeading(BuildContext context) {
-    return IconButton(
-      icon: AnimatedIcon(
-        icon: AnimatedIcons.menu_arrow,
-        progress: transitionAnimation,
-      ),
-      onPressed: () {
-        close(context, null);
-      },
-    );
-  }
-
-  @override
-  Widget buildResults(BuildContext context) {
-   return  Scaffold(
-     appBar: AppBar(
-       title: Text(
-         "Infos",
-       ),
-     ),
-   );
-  }
-
-  @override
-  Widget buildSuggestions(BuildContext context) {
-    final suggestionList = query.isEmpty
-        ? recentTest
-        : testList.where((p) => p.startsWith(query)).toList();
-    return ListView.builder(
-      itemBuilder: (context, index) => ListTile(
-        onTap: (){
-          showResults(context);
-        },
-        leading: Icon(Icons.account_box),
-        title: RichText(
-        text: TextSpan(
-          text: suggestionList[index].substring(0, query.length),
-          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-          children: [
-            TextSpan(
-              text: suggestionList[index].substring(query.length),
-              style: TextStyle(color: Colors.grey),
-            ),
-            ],
-          ),
-        ),
-      ),
-      itemCount: suggestionList.length,
     );
   }
 }
