@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         theme: ThemeData(
           brightness: Brightness.light,
-          primaryColor: Colors.black,
+          primaryColor: Colors.blue[200],
           accentColor: Colors.black54,
 
           // Define the default font family.

@@ -88,31 +88,12 @@ class HomePageState extends State<HomePage> {
     Widget addDebtDialog = Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        Container(
-          padding: const EdgeInsets.all(8),
-          decoration: BoxDecoration(
-            color: Theme.of(context).primaryColor,
-            borderRadius: BorderRadius.circular(20),
-          ),
-          height: 75,
-          width: 370,
-          child: Center(
-            child: Text(
-              "Schuld hinzufügen",
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 36.0,
-                fontStyle: FontStyle.italic,
-                color: Colors.white,
-              ),
-            ),
-          ),
-        ),
+            
         Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             Padding(
-              padding: EdgeInsets.all(4),
+              padding: EdgeInsets.all(8),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
@@ -244,19 +225,21 @@ class HomePageState extends State<HomePage> {
                 ),
               ],
             ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(0, 4, 4, 4),
-              child: MaterialButton(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15.0)),
-                elevation: 25,
-                colorBrightness: Brightness.dark,
-                child: Text(
-                  "Bestätigen",
-                  style: TextStyle(color: Colors.white, fontSize: 17),
-                ),
-                color: Colors.black,
-                onPressed: () {
+            Container(
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            color: Theme.of(context).primaryColor,
+            borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(16),
+                  bottomRight: Radius.circular(16),),
+          ),
+          height: 50,
+          width: 370,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              GestureDetector(
+                onTap: (){
                   setState(
                         () {
                       DebtBloc newDebt = DebtBloc();
@@ -273,8 +256,19 @@ class HomePageState extends State<HomePage> {
                     },
                   );
                 },
+                child: Center(
+                  child: Text(
+                    "Bestätigen",
+                    style: TextStyle(
+                      fontSize: 20.0,
+                      color: Colors.black,
+                    ),
+                  ),
+                ),
               ),
-            ),
+            ],
+          ),
+        ),
           ],
         ),
       ],
@@ -285,23 +279,27 @@ class HomePageState extends State<HomePage> {
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
         Container(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(
             color: Theme.of(context).primaryColor,
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(16),
+                  topRight: Radius.circular(16),),
           ),
-          height: 75,
+          height: 60,
           width: 370,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              Text(
-                "Summary",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 36.0,
-                  fontStyle: FontStyle.italic,
-                  color: Colors.white,
+              Center(
+                child: Text(
+                  "Summary",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 30.0,
+                    fontStyle: FontStyle.italic,
+                    color: Colors.black,
+                  ),
                 ),
               ),
             ],
